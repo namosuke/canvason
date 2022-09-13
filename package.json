@@ -1,6 +1,6 @@
 {
   "name": "canvason",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A canvas library for generating image from JSON query",
   "author": "https://github.com/namosuke",
   "homepage": "https://github.com/namosuke/canvason",
