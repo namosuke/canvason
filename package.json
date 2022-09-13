@@ -1,19 +1,21 @@
 {
-  "name": "template-node-ts-docker",
-  "version": "1.0.0",
+  "name": "canvason",
+  "version": "0.0.1",
+  "description": "A canvas library for generating image from JSON query",
   "author": "https://github.com/namosuke",
   "license": "MIT",
-  "dependencies": {
-    "dotenv": "^16.0.2"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.7.16",
     "ts-node": "^10.9.1",
     "typescript": "^4.8.3"
   },
   "scripts": {
-    "dev": "ts-node -r dotenv/config src/app.ts",
+    "dev": "ts-node src/app.ts",
     "build": "tsc",
-    "start": "node -r dotenv/config out/app.js || echo NOTE: run `yarn build` first"
+    "start": "node out/app.js || echo NOTE: run `yarn build` first",
+    "prepare": "yarn build"
   }
 }
