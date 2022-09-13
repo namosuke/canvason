@@ -1,35 +1,64 @@
-# template-node-ts-docker
+# canvason
 
-Node.js、TypeScript、Docker のテンプレート
+## Overview
 
-## 使い方
+JSON を引数にとり、画像を生成するライブラリです。  
+開発中のため、まだ使用することはできません。
 
-### 開発用に起動
-
-```sh
-yarn dev
-```
-
-実行されるファイルは`src/app.ts`です。
-
-### 本番用に起動
+## Installation
 
 ```sh
-yarn build
-yarn start
+yarn add canvason
 ```
 
-### Docker で本番用に起動
+## Usage
 
-コマンド例：
+```ts
+import { generateImage } from "canvason";
 
-```sh
-docker build -t project-name .
-docker run --rm -it project-name
-// とか
-docker run -it -d --restart always --env-file .env -p 3000:3000 project-name
+const query = {
+  canvas: {
+    w: 1980,
+    h: 1080,
+    layers: [
+      {
+        format: "png",
+        src: "https://.../bg.png",
+        x: 0,
+        y: 0,
+        w: 1920,
+        h: 1080,
+      },
+      {
+        format: "png",
+        src: "https://.../stage_bg.png",
+        x: 100,
+        y: 100,
+        w: 800,
+        h: 450,
+        masks: [
+          {
+            format: "rect",
+            x: 100,
+            y: 100,
+            w: 800,
+            h: 450,
+            rounded: 40,
+          },
+        ],
+      },
+      {
+        format: "otf",
+        src: "https://.../font.otf",
+        text: "Hello World",
+        color: "#000000",
+        size: 100,
+        x: 100,
+        y: 100,
+      },
+    ],
+  },
+};
+
+const base64 = generateImage(query, { output: "base64" });
 ```
-
-## 環境変数について
-
-`.env`ファイルがあれば、`process.env.DATABASE_URL`のような書き方で値を読み込めます。
