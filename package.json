@@ -3,9 +3,13 @@
   "version": "0.0.1",
   "description": "A canvas library for generating image from JSON query",
   "author": "https://github.com/namosuke",
+  "homepage": "https://github.com/namosuke/canvason",
   "license": "MIT",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "dependencies": {},
   "devDependencies": {
     "@types/node": "^18.7.16",
@@ -13,9 +17,9 @@
     "typescript": "^4.8.3"
   },
   "scripts": {
-    "dev": "ts-node src/app.ts",
+    "dev": "ts-node src/index.ts",
     "build": "tsc",
-    "start": "node out/app.js || echo NOTE: run `yarn build` first",
+    "start": "node dist/index.js || echo NOTE: run `yarn build` first",
     "prepare": "yarn build"
   }
 }
