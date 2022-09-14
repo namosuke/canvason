@@ -1,7 +1,7 @@
 {
   "name": "canvason",
   "version": "0.0.2",
-  "description": "A canvas library for generating image from JSON query",
+  "description": "Image generation library for node.js",
   "author": "https://github.com/namosuke",
   "homepage": "https://github.com/namosuke/canvason",
   "license": "MIT",
@@ -10,7 +10,10 @@
   "files": [
     "dist/"
   ],
-  "dependencies": {},
+  "dependencies": {
+    "@types/sharp": "^0.30.5",
+    "sharp": "^0.31.0"
+  },
   "devDependencies": {
     "@types/node": "^18.7.16",
     "ts-node": "^10.9.1",
