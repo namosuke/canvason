@@ -21,7 +21,7 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
     if (["png", "jpeg", "gif", "webp"].includes(layer.type)) {
       const { src, x = 0, y = 0, width, height, layers } = layer as ImageLayer;
 
-      const image = sharp(
+      let image = sharp(
         new Uint8Array(
           (await fetch(src).then((res) => res.arrayBuffer())) as ArrayBuffer
         ),
@@ -56,19 +56,25 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
         return base;
       }
 
+      image = sharp(
+        await image
+          .resize(width, height, { fit: "fill" })
+          .extract({
+            left: extractLeft,
+            top: extractTop,
+            width: extractWidth,
+            height: extractHeight,
+          })
+          .toBuffer()
+      );
+
+      for (const layer of layers ?? []) {
+        image = await compositeLayers(image, layer);
+      }
+
       return base.composite([
         {
-          // 子レイヤーが親レイヤーをはみ出すとエラーになる
-          // extractは切り抜けない値を指定するとエラーになる
-          input: await image
-            .resize(width, height, { fit: "fill" })
-            .extract({
-              left: extractLeft,
-              top: extractTop,
-              width: extractWidth,
-              height: extractHeight,
-            })
-            .toBuffer(),
+          input: await image.toBuffer(),
           blend: base === canvas ? "over" : "atop",
           left: left,
           top: top,
