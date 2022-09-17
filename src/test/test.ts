@@ -5,15 +5,16 @@ import { Query } from "../types";
 (async () => {
   const query: Query = {
     canvas: {
-      width: 100,
-      height: 50,
-      color: { r: 255, g: 255, b: 0, alpha: 0.5 },
+      width: 200,
+      height: 200,
       layers: [
         {
-          type: "jpeg",
-          src: "https://note.affi-sapo-sv.com/img/composite-base.jpg",
-          x: 10,
-          y: 10,
+          type: "png",
+          src: "https://pbs.twimg.com/media/Fc1mmLraMAEEFzx?format=png&name=360x360",
+          x: 150,
+          y: -300,
+          width: 100,
+          height: 700,
         },
       ],
     },
@@ -23,5 +24,5 @@ import { Query } from "../types";
     },
   };
   const image = await generateImage(query);
-  fs.writeFileSync("test.png", image);
+  fs.writeFileSync("src/test/test.png", image);
 })();

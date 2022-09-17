@@ -21,29 +21,57 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
     if (["png", "jpeg", "gif", "webp"].includes(layer.type)) {
       const { src, x = 0, y = 0, width, height, layers } = layer as ImageLayer;
 
+      const image = sharp(
+        new Uint8Array(
+          (await fetch(src).then((res) => res.arrayBuffer())) as ArrayBuffer
+        ),
+        {}
+      );
+
+      // 元画像の大きさ
+      const [srcWidth, srcHeight] = await image
+        .metadata()
+        .then((meta) => [Number(meta.width), Number(meta.height)]);
+      // キャンバスの大きさ
+      const [baseWidth, baseHeight] = await base
+        .metadata()
+        .then((meta) => [Number(meta.width), Number(meta.height)]);
+      // リサイズ後の大きさ
+      const realWidth = width ?? srcWidth;
+      const realHeight = height ?? srcHeight;
+      const left = Math.max(x, 0);
+      const top = Math.max(y, 0);
+      const extractLeft = Math.max(-x, 0);
+      const extractTop = Math.max(-y, 0);
+      const extractWidth = Math.min(baseWidth - left, realWidth - extractLeft);
+      const extractHeight = Math.min(baseHeight - top, realHeight - extractTop);
+
+      // 画面外に配置された場合
+      if (
+        extractLeft >= realWidth ||
+        extractTop >= realHeight ||
+        extractWidth <= 0 ||
+        extractHeight <= 0
+      ) {
+        return base;
+      }
+
       return base.composite([
         {
-          input: await sharp(
-            new Uint8Array(
-              (await fetch(src).then((res) => res.arrayBuffer())) as ArrayBuffer
-            ),
-            {}
-          )
-            .resize(width, height)
+          // 子レイヤーが親レイヤーをはみ出すとエラーになる
+          // extractは切り抜けない値を指定するとエラーになる
+          input: await image
+            .resize(width, height, { fit: "fill" })
             .extract({
-              left: Math.max(-x, 0),
-              top: Math.max(-y, 0),
-              width:
-                Number(await base.metadata().then((meta) => meta.width)) -
-                Math.max(x, 0),
-              height:
-                Number(await base.metadata().then((meta) => meta.height)) -
-                Math.max(y, 0),
+              left: extractLeft,
+              top: extractTop,
+              width: extractWidth,
+              height: extractHeight,
             })
             .toBuffer(),
-          blend: "atop",
-          left: Math.max(x, 0),
-          top: Math.max(y, 0),
+          blend: base === canvas ? "over" : "atop",
+          left: left,
+          top: top,
         },
       ]);
     } else {
