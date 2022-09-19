@@ -11,7 +11,7 @@
     "dist/"
   ],
   "dependencies": {
-    "@types/sharp": "^0.30.5",
+    "@types/sharp": "^0.31.0",
     "sharp": "^0.31.0"
   },
   "devDependencies": {

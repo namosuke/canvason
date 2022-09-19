@@ -28,7 +28,7 @@ export type ImageLayer = {
 };
 
 export type ShapeLayer = {
-  type: ShapeType;
+  type: "rect" | "circle" | "ellipse" | "triangle" | "line";
   width?: number;
   height?: number;
   x?: number;
@@ -38,7 +38,7 @@ export type ShapeLayer = {
 };
 
 export type TextLayer = {
-  type: TextType;
+  type: "text";
   text: string;
   x?: number;
   y?: number;
@@ -46,8 +46,6 @@ export type TextLayer = {
   height?: number;
   color?: sharp.Color;
   font?: string;
+  fontfile?: string;
   layers?: Layer[];
 };
-
-export type ShapeType = "rect" | "circle" | "ellipse" | "triangle" | "line";
-export type TextType = "text";

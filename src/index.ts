@@ -1,5 +1,6 @@
 import { Query, Layer } from "./types";
 import sharp from "sharp";
+import fs from "fs";
 
 export const generateImage = async (q: Query): Promise<string | Buffer> => {
   const { width, height, color = { r: 0, g: 0, b: 0, alpha: 0 } } = q.canvas;
@@ -19,15 +20,37 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
     layer: Layer,
     blend?: sharp.Blend
   ): Promise<sharp.Sharp> => {
-    if (layer.type === "image") {
-      const { src, x = 0, y = 0, width, height, layers } = layer;
+    if (layer.type === "image" || layer.type === "text") {
+      const src = "src" in layer ? layer.src : undefined;
+      const x = "x" in layer ? layer.x ?? 0 : 0;
+      const y = "y" in layer ? layer.y ?? 0 : 0;
+      const width = "width" in layer ? layer.width : undefined;
+      const height = "height" in layer ? layer.height : undefined;
+      const layers = "layers" in layer ? layer.layers : undefined;
+      const text = "text" in layer ? layer.text : undefined;
+      const font = "font" in layer ? layer.font : undefined;
+      const fontfile = "fontfile" in layer ? layer.fontfile : undefined;
 
-      let image = sharp(
-        new Uint8Array(
-          (await fetch(src).then((res) => res.arrayBuffer())) as ArrayBuffer
-        ),
-        {}
-      );
+      let image =
+        layer.type === "image"
+          ? sharp(
+              new Uint8Array(
+                (await fetch(src as string).then((res) =>
+                  res.arrayBuffer()
+                )) as ArrayBuffer
+              ),
+              {}
+            )
+          : sharp({
+              text: {
+                text: text as string,
+                rgba: true,
+                width: width,
+                height: height,
+                font: font,
+                fontfile: fontfile,
+              },
+            }).toFormat("png");
 
       // 元画像の大きさ
       const [srcWidth, srcHeight] = await image
@@ -56,6 +79,11 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
       ) {
         return base;
       }
+
+      fs.writeFileSync(
+        "src/test/test" + Date.now() + ".png",
+        await image.toBuffer()
+      );
 
       image = sharp(
         await image
