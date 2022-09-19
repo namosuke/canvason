@@ -7,7 +7,7 @@ import { Query } from "../types";
     canvas: {
       width: 200,
       height: 200,
-      color: { r: 0, g: 255, b: 255, alpha: 0.2 },
+      color: { r: 255, g: 255, b: 0, alpha: 0.2 },
       layers: [
         {
           type: "image",
@@ -24,8 +24,26 @@ import { Query } from "../types";
               y: -50,
               width: 300,
               height: 300,
+              layers: [
+                {
+                  type: "image",
+                  src: "https://pbs.twimg.com/media/Fc1mojRacAEsySc?format=png&name=360x360",
+                  x: 70,
+                  y: 80,
+                  width: 100,
+                  height: 100,
+                },
+              ],
             },
           ],
+        },
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/Fc1mmLraMAEEFzx?format=png&name=360x360",
+          x: 0,
+          y: 50,
+          width: 100,
+          height: 100,
         },
       ],
     },

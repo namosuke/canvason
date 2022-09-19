@@ -1,4 +1,4 @@
-import { Query, Layer, ImageLayer } from "./types";
+import { Query, Layer } from "./types";
 import sharp from "sharp";
 
 export const generateImage = async (q: Query): Promise<string | Buffer> => {
@@ -16,7 +16,8 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
 
   const compositeLayers = async (
     base: sharp.Sharp,
-    layer: Layer
+    layer: Layer,
+    blend?: sharp.Blend
   ): Promise<sharp.Sharp> => {
     if (layer.type === "image") {
       const { src, x = 0, y = 0, width, height, layers } = layer;
@@ -72,14 +73,19 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
         image = await compositeLayers(image, layer);
       }
 
-      return base.composite([
-        {
-          input: await image.toBuffer(),
-          blend: base === canvas ? "over" : "atop",
-          left: left,
-          top: top,
-        },
-      ]);
+      return sharp(
+        await base
+          .composite([
+            {
+              input: await image.toBuffer(),
+              blend: blend ?? "atop",
+              left: left,
+              top: top,
+            },
+          ])
+          .toFormat("png")
+          .toBuffer()
+      );
     } else {
       return base;
     }
@@ -88,7 +94,7 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
   let base = canvas;
 
   for (const layer of q.canvas.layers ?? []) {
-    base = await compositeLayers(base, layer);
+    base = await compositeLayers(base, layer, "over");
   }
 
   const buffer = await base.toFormat(format).toBuffer();
