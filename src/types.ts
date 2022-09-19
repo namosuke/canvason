@@ -18,7 +18,7 @@ export type CanvasLayer = {
 export type Layer = ImageLayer | ShapeLayer | TextLayer;
 
 export type ImageLayer = {
-  type: ImageType;
+  type: "image";
   src: string;
   width?: number;
   height?: number;
@@ -49,7 +49,5 @@ export type TextLayer = {
   layers?: Layer[];
 };
 
-export type ImageType = "png" | "jpeg" | "gif" | "webp";
 export type ShapeType = "rect" | "circle" | "ellipse" | "triangle" | "line";
 export type TextType = "text";
-export type CanvasType = "canvas";

@@ -10,7 +10,7 @@ import { Query } from "../types";
       color: { r: 0, g: 255, b: 255, alpha: 0.2 },
       layers: [
         {
-          type: "png",
+          type: "image",
           src: "https://pbs.twimg.com/media/Fc1mmLraMAEEFzx?format=png&name=360x360",
           x: -50,
           y: -50,
@@ -18,7 +18,7 @@ import { Query } from "../types";
           height: 300,
           layers: [
             {
-              type: "png",
+              type: "image",
               src: "https://pbs.twimg.com/media/Fc1mmtrakAAIKis?format=png&name=360x360",
               x: -50,
               y: -50,

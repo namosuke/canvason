@@ -18,8 +18,8 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
     base: sharp.Sharp,
     layer: Layer
   ): Promise<sharp.Sharp> => {
-    if (["png", "jpeg", "gif", "webp"].includes(layer.type)) {
-      const { src, x = 0, y = 0, width, height, layers } = layer as ImageLayer;
+    if (layer.type === "image") {
+      const { src, x = 0, y = 0, width, height, layers } = layer;
 
       let image = sharp(
         new Uint8Array(
