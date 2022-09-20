@@ -19,43 +19,48 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
     layer: Layer,
     blend?: sharp.Blend
   ): Promise<sharp.Sharp> => {
-    if (layer.type === "image" || layer.type === "text") {
-      const src = "src" in layer ? layer.src : undefined;
-      const x = "x" in layer ? layer.x ?? 0 : 0;
-      const y = "y" in layer ? layer.y ?? 0 : 0;
-      const width = "width" in layer ? layer.width : undefined;
-      const height = "height" in layer ? layer.height : undefined;
-      const layers = "layers" in layer ? layer.layers : undefined;
-      const text = "text" in layer ? layer.text : undefined;
-      const font = "font" in layer ? layer.font : undefined;
-      const fontfile = "fontfile" in layer ? layer.fontfile : undefined;
-      const align = "align" in layer ? layer.align : undefined;
-      const justify = "justify" in layer ? layer.justify : undefined;
-      const spacing = "spacing" in layer ? layer.spacing : undefined;
+    if (
+      layer.type === "image" ||
+      layer.type === "text" ||
+      layer.type === "rect"
+    ) {
+      const x = layer.x ?? 0;
+      const y = layer.y ?? 0;
+      const width = layer.width;
+      const height = layer.height;
+      const layers = layer.layers;
 
       let image =
         layer.type === "image"
           ? sharp(
               new Uint8Array(
-                (await fetch(src as string).then((res) =>
+                (await fetch(layer.src).then((res) =>
                   res.arrayBuffer()
                 )) as ArrayBuffer
               ),
               {}
             )
-          : sharp({
+          : layer.type === "text"
+          ? sharp({
               text: {
-                text: text as string,
+                text: layer.text,
                 rgba: true,
                 width: width,
                 height: height,
-                font: font,
-                fontfile: fontfile,
-                align: align,
-                justify: justify,
-                spacing: spacing,
+                font: layer.font,
+                fontfile: layer.fontfile,
+                align: layer.align,
+                justify: layer.justify,
+                spacing: layer.spacing,
               },
-            }).toFormat("png");
+            }).toFormat("png")
+          : sharp(
+              Buffer.from(`
+            <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
+              <rect width="100%" height="100%" fill="${layer.fill}" stroke="${layer.stroke}" stroke-width="${layer.strokeWidth}" rx="${layer.rx}" ry="${layer.ry}"/>
+            </svg>
+          `)
+            );
 
       // 元画像の大きさ
       const [srcWidth, srcHeight] = await image
