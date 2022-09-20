@@ -30,6 +30,10 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
       const height = layer.height;
       const layers = layer.layers;
 
+      const svgSanitize = (text: string | undefined): string | undefined => {
+        return text?.replace("'", "").replace('"', "");
+      };
+
       let image =
         layer.type === "image"
           ? sharp(
@@ -57,7 +61,11 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
           : sharp(
               Buffer.from(`
             <svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">
-              <rect width="100%" height="100%" fill="${layer.fill}" stroke="${layer.stroke}" stroke-width="${layer.strokeWidth}" rx="${layer.rx}" ry="${layer.ry}"/>
+              <rect width="100%" height="100%" fill="${svgSanitize(
+                layer.fill
+              )}" stroke="${svgSanitize(layer.stroke)}" stroke-width="${
+                layer.strokeWidth
+              }" rx="${layer.rx}" ry="${layer.ry}"/>
             </svg>
           `)
             );
