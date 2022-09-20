@@ -1,6 +1,5 @@
 import { Query, Layer } from "./types";
 import sharp from "sharp";
-import fs from "fs";
 
 export const generateImage = async (q: Query): Promise<string | Buffer> => {
   const { width, height, color = { r: 0, g: 0, b: 0, alpha: 0 } } = q.canvas;
@@ -30,6 +29,9 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
       const text = "text" in layer ? layer.text : undefined;
       const font = "font" in layer ? layer.font : undefined;
       const fontfile = "fontfile" in layer ? layer.fontfile : undefined;
+      const align = "align" in layer ? layer.align : undefined;
+      const justify = "justify" in layer ? layer.justify : undefined;
+      const spacing = "spacing" in layer ? layer.spacing : undefined;
 
       let image =
         layer.type === "image"
@@ -49,6 +51,9 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
                 height: height,
                 font: font,
                 fontfile: fontfile,
+                align: align,
+                justify: justify,
+                spacing: spacing,
               },
             }).toFormat("png");
 
@@ -79,11 +84,6 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
       ) {
         return base;
       }
-
-      fs.writeFileSync(
-        "src/test/test" + Date.now() + ".png",
-        await image.toBuffer()
-      );
 
       image = sharp(
         await image

@@ -44,8 +44,10 @@ export type TextLayer = {
   y?: number;
   width?: number;
   height?: number;
-  color?: sharp.Color;
   font?: string;
   fontfile?: string;
+  align?: "left" | "center" | "right";
+  justify?: boolean;
+  spacing?: number;
   layers?: Layer[];
 };
