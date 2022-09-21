@@ -95,3 +95,33 @@ import { Query } from "../types";
   const image = await generateImage(query);
   fs.writeFileSync("src/test/test.png", image);
 })();
+
+(async () => {
+  const query: Query = {
+    canvas: {
+      width: 1920,
+      height: 1080,
+      layers: [
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FcqNhl9aIAA-aQ6?format=jpg&name=orig",
+        },
+        {
+          type: "text",
+          text: '<span foreground="white">ムニ・エール海洋発電所</span>',
+          font: "Splatoon2_font",
+          fontfile: "src",
+          x: 100,
+          y: 100,
+          dpi: 700,
+        },
+      ],
+    },
+    output: {
+      format: "png",
+      by: "buffer",
+    },
+  };
+  const image = await generateImage(query);
+  fs.writeFileSync("src/test/test2.png", image);
+})();

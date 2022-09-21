@@ -45,6 +45,7 @@ export type TextLayer = {
   align?: "left" | "center" | "right";
   justify?: boolean;
   spacing?: number;
+  dpi?: number;
   layers?: Layer[];
 };
 

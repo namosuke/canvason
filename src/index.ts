@@ -56,6 +56,7 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
                 align: layer.align,
                 justify: layer.justify,
                 spacing: layer.spacing,
+                dpi: layer.dpi,
               },
             }).toFormat("png")
           : sharp(
