@@ -24,10 +24,10 @@ export const generateImage = async (q: Query): Promise<string | Buffer> => {
       layer.type === "text" ||
       layer.type === "rect"
     ) {
-      const x = layer.x ?? 0;
-      const y = layer.y ?? 0;
-      const width = layer.width;
-      const height = layer.height;
+      const x = layer.x ? Math.floor(layer.x) : 0;
+      const y = layer.y ? Math.floor(layer.y) : 0;
+      const width = layer.width ? Math.floor(layer.width) : undefined;
+      const height = layer.height ? Math.floor(layer.height) : undefined;
       const layers = layer.layers;
 
       const svgSanitize = (text: string | undefined): string | undefined => {

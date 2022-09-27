@@ -97,6 +97,11 @@ import { Query } from "../types";
 })();
 
 (async () => {
+  const width = 1920;
+  const margin = 100;
+  const gap = 10;
+  const weaponWidth = (width - margin * 2 - gap * 3) / 4;
+
   const query: Query = {
     canvas: {
       width: 1920,
@@ -107,13 +112,60 @@ import { Query } from "../types";
           src: "https://pbs.twimg.com/media/FcqNhl9aIAA-aQ6?format=jpg&name=orig",
         },
         {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FdOfXSBagAMgUOs?format=png&name=900x900",
+          width: 1920,
+          height: 1080,
+        },
+        {
+          type: "rect",
+          x: -100,
+          y: 810,
+          width: 1750,
+          height: 500,
+          fill: "#00000099",
+          rx: 100,
+        },
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FdOc3cHacAA-tet?format=png&name=small",
+          x: margin,
+          y: 300,
+          width: weaponWidth,
+          height: weaponWidth,
+        },
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FdOc7j2akAAJOW1?format=png&name=small",
+          x: margin + weaponWidth + gap,
+          y: 300,
+          width: weaponWidth,
+          height: weaponWidth,
+        },
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FdOc8pZaMAAnXWe?format=png&name=small",
+          x: margin + (weaponWidth + gap) * 2,
+          y: 300,
+          width: weaponWidth,
+          height: weaponWidth,
+        },
+        {
+          type: "image",
+          src: "https://pbs.twimg.com/media/FdOc-o-aMAAgSdH?format=png&name=small",
+          x: margin + (weaponWidth + gap) * 3,
+          y: 300,
+          width: weaponWidth,
+          height: weaponWidth,
+        },
+        {
           type: "text",
           text: '<span foreground="white">ムニ・エール海洋発電所</span>',
-          font: "Splatoon2_font",
+          font: "splatoon1jpja",
           fontfile: "src",
           x: 100,
-          y: 100,
-          dpi: 700,
+          y: 880,
+          dpi: 900,
         },
       ],
     },
